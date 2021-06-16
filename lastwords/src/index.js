@@ -32,6 +32,7 @@ class App extends React.Component {
     try {
       await faceApi.nets.tinyFaceDetector.load("/models/");
       await faceApi.loadFaceExpressionModel(`/models/`);
+      await faceApi.loadFaceRecognitionModel(`/models/`);
       this.mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" }
       });
@@ -60,6 +61,25 @@ class App extends React.Component {
     const result = await faceApi
       .detectSingleFace(this.video.current, options)
       .withFaceExpressions();
+    
+    // const canvas = require("canvas");
+    // //const { Canvas, Image, ImageData } = canvas; 
+    // const img =  await canvas.loadImage(`https://www.tdcj.texas.gov/death_row/dr_info/halljusten2.jpg`);
+    
+    var out = await faceApi.computeFaceDescriptor(this.video.current);
+    
+
+    const image = await faceApi.fetchImage('/images/1.jpeg')
+
+    console.log(image instanceof HTMLImageElement) // true
+    var deathrow = await faceApi.computeFaceDescriptor(image);
+    // console.log(out);
+    //console.log(deathrow);
+
+    const distance = faceApi.round(
+      faceApi.euclideanDistance(out, deathrow)
+    )
+    console.log(distance);
 
     if (result) {
       this.log(result);
@@ -115,3 +135,5 @@ class App extends React.Component {
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
+
+//https://github.com/justadudewhohacks/face-api.js/blob/master/examples/examples-browser/views/bbtFaceSimilarity.html
