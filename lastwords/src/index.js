@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import * as faceApi from "face-api.js";
-
+import data_inmates from "./data";
 import "./styles.css";
 
 const expressionMap = {
@@ -61,25 +61,36 @@ class App extends React.Component {
     const result = await faceApi
       .detectSingleFace(this.video.current, options)
       .withFaceExpressions();
-    
-    // const canvas = require("canvas");
-    // //const { Canvas, Image, ImageData } = canvas; 
-    // const img =  await canvas.loadImage(`https://www.tdcj.texas.gov/death_row/dr_info/halljusten2.jpg`);
-    
+  
     var out = await faceApi.computeFaceDescriptor(this.video.current);
     
 
-    const image = await faceApi.fetchImage('/images/1.jpeg')
+    
 
-    console.log(image instanceof HTMLImageElement) // true
-    var deathrow = await faceApi.computeFaceDescriptor(image);
-    // console.log(out);
-    //console.log(deathrow);
+    //console.log(image instanceof HTMLImageElement) // true
+    //var deathrow = await faceApi.computeFaceDescriptor(image);
+   
+    var i;
+    var results = {"selection": 1, "text": "none"};
+    var distance = 1.0;
+    for (i = 1; i < 3; i++) {
+      
+      console.log("/images/" + i + ".jpeg")
+      const image = await faceApi.fetchImage("/images/" + i + ".jpeg");
+      var deathrow = await faceApi.computeFaceDescriptor(image);
+      let curr_distance = faceApi.round(
+        faceApi.euclideanDistance(out, deathrow)
+      )
+      
+      if (curr_distance < distance){
+        results["selection"] = i;
+        results["text"] = data_inmates[i]["Last Statement"];
+        distance = curr_distance;
+      }
 
-    const distance = faceApi.round(
-      faceApi.euclideanDistance(out, deathrow)
-    )
-    console.log(distance);
+    }
+
+    console.log(results);
 
     if (result) {
       this.log(result);
@@ -100,7 +111,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <h1>Face Recognition Webcam</h1>
+        <h1>Last statement </h1>
         <div>
           {this.state.expressions
             .sort((a, b) => b[1] - a[1])
