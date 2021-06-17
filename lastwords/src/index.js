@@ -14,14 +14,16 @@ import "./styles.css";
 //   disgusted: "🤢",
 //   surprised: "😲"
 // };
-
+var video = React.createRef();
+var mediaStream = React.createRef();
 //class App extends React.Component 
 function App (){
-  var video = React.createRef();
-
+//   var video = React.createRef();
+//   var mediaStream = React.createRef();
   //state = { expressions: [] };
 
-  //const [expressions, setExpressions] = useState([])
+  const [distanceScore, setdistanceScore] = useState(1.0)
+  const [lastwords, setlastwords] = useState("")
 
 
   useEffect(() => run(), []);
@@ -40,21 +42,24 @@ function App (){
       await faceApi.nets.tinyFaceDetector.load("/models/");
       await faceApi.loadFaceExpressionModel(`/models/`);
       await faceApi.loadFaceRecognitionModel(`/models/`);
-      const mediaStream = await navigator.mediaDevices.getUserMedia({
+      mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" }
       });
 
-      video.current.srcObject = mediaStream;
+    video.current.srcObject = mediaStream;
     } catch (e) {
       log(e.name, e.message, e.stack);
     }
   };
 
   const onPlay = async () => {
+
+    
+
     if (
       video.current.paused ||
-      video.current.ended ||
-      !faceApi.nets.tinyFaceDetector.params
+      video.current.ended //||
+      //!faceApi.nets.tinyFaceDetector.params
     ) {
       setTimeout(() => onPlay());
       return;
@@ -88,11 +93,13 @@ function App (){
         results["selection"] = i;
         results["text"] = data_inmates[i]["Last Statement"];
         distance = curr_distance;
+        setdistanceScore(distance);
       }
 
     }
 
     console.log(results);
+    setlastwords(results.text)
 
     // if (result) {
     //   log(result);
@@ -108,13 +115,13 @@ function App (){
     //   //this.setState(() => ({ expressions }));
     // }
 
-    setTimeout(() => onPlay(), 1000);
+    setTimeout(() => onPlay(), 5000);
   };
 
   
     return (
       <div className="App">
-        <h1>Last statement </h1>
+        <h1>Last statement {distanceScore} and {lastwords}</h1>
         
         <div style={{ width: "100%", height: "100vh", position: "relative" }}>
           <video
