@@ -1,3 +1,6 @@
+# npm run deploy
+https://blog.logrocket.com/8-ways-to-deploy-a-react-app-for-free/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -7,12 +7,15 @@
   "dependencies": {
     "canvas": "^2.8.0",
     "face-api.js": "0.18.0",
+    "gh-pages": "^3.2.1",
     "react": "16.8.0",
     "react-dom": "16.8.0",
     "react-scripts": "2.0.3"
   },
   "devDependencies": {},
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
@@ -23,5 +26,6 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "homepage": "https://Guidosalimbeni.github.io/LastWordsWebApp"
 }
