@@ -134,7 +134,7 @@ function App (){
     }
     `}
     </style>
-        <Header as='h1' content='An artistic project by Guido Salimbeni' style={style.h1} textAlign='center' />
+        
         <Header as='h3' textAlign='center' style={style.h3} content= {lastwords}/>
         
         <Container >
@@ -164,6 +164,7 @@ function App (){
       </Segment.Group>
     </Container>
     </Container>
+    <Header as='h1' content='An artistic project by Guido Salimbeni' style={style.h1} textAlign='center' />
     <Header as='h3' textAlign='center' style={style.h3} content= "www.guidosalimbeni.it"/>
         
       </div>
@@ -175,3 +176,5 @@ const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
 
 //https://github.com/justadudewhohacks/face-api.js/blob/master/examples/examples-browser/views/bbtFaceSimilarity.html
+// https://www.kaggle.com/mykhe1097/last-words-of-death-row-inmates
+// https://www.tdcj.texas.gov/death_row/dr_executed_offenders.html
