@@ -4,7 +4,9 @@ import ReactDOM from "react-dom";
 import * as faceApi from "face-api.js";
 import data_inmates from "./data";
 import "./styles.css";
-
+import ReactGA from 'react-ga';
+ReactGA.initialize('276282435');
+ReactGA.pageview(window.location.pathname + window.location.search);
 // const expressionMap = {
 //   neutral: "😶",
 //   happy: "😄",

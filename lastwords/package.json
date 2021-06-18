@@ -9,6 +9,7 @@
     "face-api.js": "0.18.0",
     "react": "16.8.0",
     "react-dom": "16.8.0",
+    "react-ga": "^3.3.0",
     "react-scripts": "2.0.3"
   },
   "devDependencies": {},
@@ -24,5 +25,4 @@
     "not ie <= 11",
     "not op_mini all"
   ]
-  
 }
