@@ -5,34 +5,26 @@ import * as faceApi from "face-api.js";
 import data_inmates from "./data";
 import "./styles.css";
 import ReactGA from 'react-ga';
+import 'semantic-ui-css/semantic.min.css';
+import {
+  Container,
+  Header,
+  Segment,
+} from 'semantic-ui-react'
 ReactGA.initialize('276282435');
 ReactGA.pageview(window.location.pathname + window.location.search);
-// const expressionMap = {
-//   neutral: "😶",
-//   happy: "😄",
-//   sad: "😞",
-//   angry: "🤬",
-//   fearful: "😖",
-//   disgusted: "🤢",
-//   surprised: "😲"
-// };
+
 var video = React.createRef();
 var mediaStream = React.createRef();
-//class App extends React.Component 
-function App (){
-//   var video = React.createRef();
-//   var mediaStream = React.createRef();
-  //state = { expressions: [] };
 
-  const [distanceScore, setdistanceScore] = useState(1.0)
+function App (){
+
+  //const [distanceScore, setdistanceScore] = useState(1.0)
   const [lastwords, setlastwords] = useState("")
 
 
   useEffect(() => run(), []);
 
-//   componentDidMount() {
-//     this.run();
-//   }
 
   const log = (...args) => {
     console.log(...args);
@@ -60,22 +52,12 @@ function App (){
 
     if (
       video.current.paused ||
-      video.current.ended //||
-      //!faceApi.nets.tinyFaceDetector.params
+      video.current.ended 
     ) {
       setTimeout(() => onPlay());
       return;
     }
 
-    // const options = new faceApi.TinyFaceDetectorOptions({
-    //   inputSize: 512,
-    //   scoreThreshold: 0.5
-    // });
-
-    // const result = await faceApi
-    //   .detectSingleFace(video.current, options)
-    //   .withFaceExpressions();
-  
     var out = await faceApi.computeFaceDescriptor(video.current);
     
 
@@ -95,37 +77,70 @@ function App (){
         results["selection"] = i;
         results["text"] = data_inmates[i]["Last Statement"];
         distance = curr_distance;
-        setdistanceScore(distance);
+        //setdistanceScore(distance);
       }
 
     }
 
-    console.log(results);
-    setlastwords(results.text)
+    //console.log(results);
+    setlastwords("According to your face, there is a " + distance + " % similarity to the inmate's last statement: " + results.text)
 
-    // if (result) {
-    //   log(result);
-    //   const expressions = result.expressions.reduce(
-    //     (acc, { expression, probability }) => {
-    //       acc.push([expressionMap[expression], probability]);
-    //       return acc;
-    //     },
-    //     []
-    //   );
-    //   log(expressions);
-    //   setExpressions(expressions)
-    //   //this.setState(() => ({ expressions }));
-    // }
 
     setTimeout(() => onPlay(), 5000);
   };
 
+  const style = {
+    h1: {
+      marginTop: '1em',
+      color: "#fff",
+    },
+    h2: {
+      margin: '4em 0em 2em',
+    },
+    h3: {
+      marginTop: '1em',
+      padding: '1em 0em',
+      color: "#fff",
+    },
+    last: {
+      marginBottom: '300px',
+    },
+  }
+
   
     return (
       <div className="App">
-        <h1>Last statement {distanceScore} and {lastwords}</h1>
+
+<Container>
+    {/* Heads up! We apply there some custom styling, you usually will not need it. */}
+    <style>
+      {`
+      html, body {
+        background-color: #252839 !important;
+      }
+      p {
+        align-content: center;
+        background-color: #495285;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 6em;
+      }
+      p > span {
+        opacity: 0.4;
+        text-align: center;
+      }
+    }
+    `}
+    </style>
+        <Header as='h1' content='An artistic project by Guido Salimbeni' style={style.h1} textAlign='center' />
+        <Header as='h3' textAlign='center' style={style.h3} content= {lastwords}/>
         
-        <div style={{ width: "100%", height: "100vh", position: "relative" }}>
+        <Container >
+      <Segment.Group >
+        <Segment>
+        <div style={{ width: "100%", height: "100vh", position: "relative" , backgroundColor: "#495285"}}>
           <video
             ref={video}
             autoPlay
@@ -142,6 +157,15 @@ function App (){
             }}
           />
         </div>
+
+
+        </Segment>
+        
+      </Segment.Group>
+    </Container>
+    </Container>
+    <Header as='h3' textAlign='center' style={style.h3} content= "www.guidosalimbeni.it"/>
+        
       </div>
     );
   
