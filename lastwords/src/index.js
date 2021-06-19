@@ -64,15 +64,15 @@ function App (){
     var i;
     var results = {"selection": 1, "text": "none"};
     var distance = 1.0;
-    for (i = 1; i < 3; i++) {
+    for (i = 1; i < 14; i++) {
       
-      console.log("/images/" + i + ".jpeg")
+      //console.log("/images/" + i + ".jpeg")
       const image = await faceApi.fetchImage("/images/" + i + ".jpeg");
       var deathrow = await faceApi.computeFaceDescriptor(image);
       let curr_distance = faceApi.round(
         faceApi.euclideanDistance(out, deathrow)
       )
-      
+      //console.log(curr_distance);
       if (curr_distance < distance){
         results["selection"] = i;
         results["text"] = data_inmates[i]["Last Statement"];
@@ -83,7 +83,7 @@ function App (){
     }
 
     //console.log(results);
-    setlastwords("According to your face, there is a " + distance + " % similarity to the inmate's last statement: " + results.text)
+    setlastwords("According to your face, there is a " + (1 - distance ) + " % similarity to the inmate's last statement: " + results.text)
 
 
     setTimeout(() => onPlay(), 5000);
