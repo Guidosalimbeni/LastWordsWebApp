@@ -10,8 +10,7 @@ import {
   Header,
   Grid,
 } from 'semantic-ui-react'
-ReactGA.initialize('276282435');
-ReactGA.pageview(window.location.pathname + window.location.search);
+
 
 var video = React.createRef();
 var mediaStream = React.createRef();
@@ -23,6 +22,12 @@ function App (){
   const log = (...args) => {
     console.log(...args);
   };
+
+  useEffect(()=> {
+    ReactGA.initialize('276282435');
+    ReactGA.pageview(window.location.pathname + window.location.search);
+    
+  }, []);
 
   const run = async () => {
     log("run started");
