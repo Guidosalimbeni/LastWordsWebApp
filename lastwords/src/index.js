@@ -1,4 +1,3 @@
-//import React from "react";
 import React, { useState, useEffect } from 'react';
 import ReactDOM from "react-dom";
 import * as faceApi from "face-api.js";
@@ -9,7 +8,7 @@ import 'semantic-ui-css/semantic.min.css';
 import {
   Container,
   Header,
-  Segment,
+  Grid,
 } from 'semantic-ui-react'
 ReactGA.initialize('276282435');
 ReactGA.pageview(window.location.pathname + window.location.search);
@@ -19,13 +18,8 @@ var mediaStream = React.createRef();
 
 function App (){
 
-  //const [distanceScore, setdistanceScore] = useState(1.0)
   const [lastwords, setlastwords] = useState("")
-
-
   useEffect(() => run(), []);
-
-
   const log = (...args) => {
     console.log(...args);
   };
@@ -34,6 +28,7 @@ function App (){
     log("run started");
     try {
       await faceApi.nets.tinyFaceDetector.load("/models/");
+      await faceApi.nets.ssdMobilenetv1.load('/models');
       await faceApi.loadFaceExpressionModel(`/models/`);
       await faceApi.loadFaceRecognitionModel(`/models/`);
       mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -59,7 +54,26 @@ function App (){
     }
 
     var out = await faceApi.computeFaceDescriptor(video.current);
+    var result = await faceApi.detectSingleFace(video.current);
+
+    if (result) {
+      const canvas = document.getElementById('overlay')
+      
+      var w = result.imageWidth;
+      var h = result.imageHeight;
+ 
+      const dims = faceApi.resizeResults(result, { width: w, height: h})
+      
+      canvas.width = w
+      canvas.height = h
+      
+      faceApi.drawDetection(canvas, dims, false)
+
+      // const dims = faceApi.matchDimensions(canvas, video.current, true)
+      // faceApi.draw.drawDetections(canvas, faceApi.resizeResults(result, dims))
+      // https://www.youtube.com/watch?v=CVClHLwv-4I
     
+    }
 
     var i;
     var results = {"selection": 1, "text": "none"};
@@ -83,10 +97,10 @@ function App (){
     }
 
     //console.log(results);
-    setlastwords("According to your face, there is a " + (1 - distance ) + " % similarity to the inmate's last statement: " + results.text)
+    setlastwords(results.text);
 
 
-    setTimeout(() => onPlay(), 5000);
+    setTimeout(() => onPlay(), 1000);
   };
 
   const style = {
@@ -99,20 +113,22 @@ function App (){
     },
     h3: {
       marginTop: '1em',
-      padding: '1em 0em',
+      padding: '0.5em 0em',
       color: "#fff",
+      marginBottom:'10px',
     },
     last: {
-      marginBottom: '300px',
+      marginBottom: '30px',
     },
   }
 
   
     return (
+      <>
       <div className="App">
 
-<Container>
-    {/* Heads up! We apply there some custom styling, you usually will not need it. */}
+      <Container>
+  
     <style>
       {`
       html, body {
@@ -134,40 +150,48 @@ function App (){
     }
     `}
     </style>
+        <Header as='h3' textAlign='center' style={style.h3} content= "An artwork by guidosalimbeni.it"/>
         
+        <Grid columns={2} stackable> 
+        <Grid.Column>
+        <Header as='h3' textAlign='center' style={style.h3} content= "Last statement from best match:"/>
         <Header as='h3' textAlign='center' style={style.h3} content= {lastwords}/>
+      </Grid.Column>
+      <Grid.Column>
+      <Container style={{ width: "720", height: "560", position: "relative", alignSelf: 'center'}}>
         
-        <Container >
-      <Segment.Group >
-        <Segment>
-        <div style={{ width: "100%", height: "100vh", position: "relative" , backgroundColor: "#495285"}}>
-          <video
-            ref={video}
-            autoPlay
-            muted
-            onPlay={onPlay}
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100vh",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              top: 0
-            }}
-          />
-        </div>
-
-
-        </Segment>
+        <video
+          ref={video}
+          autoPlay
+          muted
+          onPlay={onPlay}
+          style={{
+            position: "absolute",
+            width: "720" ,
+            height: "560" ,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            top: 0,
+            alignSelf: 'center',
+            
+            
+          }}
+        />
+        <canvas id="overlay" style ={{position: "absolute", top: 0, left: 0}}/>
+       
+  
+      </Container>
+      </Grid.Column>
+        </Grid>
         
-      </Segment.Group>
+        
     </Container>
-    </Container>
-    <Header as='h1' content='An artistic project by Guido Salimbeni' style={style.h1} textAlign='center' />
-    <Header as='h3' textAlign='center' style={style.h3} content= "www.guidosalimbeni.it"/>
-        
+    
+      
       </div>
+      
+      </>
     );
   
 }
@@ -178,3 +202,4 @@ ReactDOM.render(<App />, rootElement);
 //https://github.com/justadudewhohacks/face-api.js/blob/master/examples/examples-browser/views/bbtFaceSimilarity.html
 // https://www.kaggle.com/mykhe1097/last-words-of-death-row-inmates
 // https://www.tdcj.texas.gov/death_row/dr_executed_offenders.html
+// "100%" "100vh"
