@@ -11,13 +11,14 @@ import {
   Grid,
 } from 'semantic-ui-react'
 
-
 var video = React.createRef();
 var mediaStream = React.createRef();
 
 function App (){
 
   const [lastwords, setlastwords] = useState("")
+  var [distance, setdistanceScore] = useState(0)
+  
   useEffect(() => run(), []);
   const log = (...args) => {
     console.log(...args);
@@ -47,14 +48,12 @@ function App (){
   };
 
   const onPlay = async () => {
-
     
-
     if (
       video.current.paused ||
       video.current.ended 
     ) {
-      setTimeout(() => onPlay());
+      setTimeout(() => onPlay(),10);
       return;
     }
 
@@ -82,7 +81,7 @@ function App (){
 
     var i;
     var results = {"selection": 1, "text": "none"};
-    var distance = 1.0;
+    // var distance = 1.0;
     for (i = 1; i < 14; i++) {
       
       //console.log("/images/" + i + ".jpeg")
@@ -91,21 +90,26 @@ function App (){
       let curr_distance = faceApi.round(
         faceApi.euclideanDistance(out, deathrow)
       )
-      //console.log(curr_distance);
-      if (curr_distance < distance){
+      // console.log(curr_distance);
+     
+      if (curr_distance > distance){
         results["selection"] = i;
         results["text"] = data_inmates[i]["Last Statement"];
         distance = curr_distance;
-        //setdistanceScore(distance);
+        
+        setdistanceScore(distance);
+        setlastwords(results.text);
       }
+
+      console.log(distance);
 
     }
 
-    //console.log(results);
-    setlastwords(results.text);
+    // console.log(results);
+    // setlastwords(results.text);
 
 
-    setTimeout(() => onPlay(), 1000);
+    setTimeout(() => onPlay(), 3000);
   };
 
   const style = {
