@@ -40,4 +40,5 @@ const data_inmates ={
     // 39:{"name": "Autry, James David","Last Statement": ""}, 
 };
 
+
 export default data_inmates;

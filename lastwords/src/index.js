@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactDOM from "react-dom";
 import * as faceApi from "face-api.js";
 import data_inmates from "./data";
+import data_inmates_2 from "./data2";
 import "./styles.css";
 import ReactGA from 'react-ga';
 import 'semantic-ui-css/semantic.min.css';
@@ -82,34 +83,54 @@ function App (){
     var i;
     var results = {"selection": 1, "text": "none"};
     // var distance = 1.0;
-    for (i = 1; i < 14; i++) {
-      
-      //console.log("/images/" + i + ".jpeg")
-      const image = await faceApi.fetchImage("/images/" + i + ".jpeg");
-      var deathrow = await faceApi.computeFaceDescriptor(image);
-      let curr_distance = faceApi.round(
-        faceApi.euclideanDistance(out, deathrow)
+
+    for (const [key, value] of Object.entries(data_inmates_2)) {
+      // console.log(key, value);
+      const image = await faceApi.fetchImage("/images2/" + key + ".jpg");
+      var deathrow2 = await faceApi.computeFaceDescriptor(image);
+      let curr_distance2 = faceApi.round(
+        faceApi.euclideanDistance(out, deathrow2)
       )
-      // console.log(curr_distance);
-     
-      if (curr_distance > distance){
-        results["selection"] = i;
-        results["text"] = data_inmates[i]["Last Statement"];
-        distance = curr_distance;
+      // console.log("  eeeee  e   e " + curr_distance2);
+      if (curr_distance2 > distance){
+        results["selection"] = key;
+        results["text"] = data_inmates_2[key]["Last Statement"];
+        distance = curr_distance2;
         
         setdistanceScore(distance);
         setlastwords(results.text);
       }
-
-      console.log(distance);
-
     }
+
+
+    // for (i = 1; i < 14; i++) {
+      
+    //   //console.log("/images/" + i + ".jpeg")
+    //   const image = await faceApi.fetchImage("/images/" + i + ".jpeg");
+    //   var deathrow = await faceApi.computeFaceDescriptor(image);
+    //   let curr_distance = faceApi.round(
+    //     faceApi.euclideanDistance(out, deathrow)
+    //   )
+    //   // console.log(curr_distance);
+     
+    //   if (curr_distance > distance){
+    //     results["selection"] = i;
+    //     results["text"] = data_inmates[i]["Last Statement"];
+    //     distance = curr_distance;
+        
+    //     setdistanceScore(distance);
+    //     setlastwords(results.text);
+    //   }
+
+    //   // console.log(distance);
+
+    // }
 
     // console.log(results);
     // setlastwords(results.text);
 
 
-    setTimeout(() => onPlay(), 3000);
+    setTimeout(() => onPlay(), 2000);
   };
 
   const style = {
