@@ -159,7 +159,7 @@ function App (){
       <Icon name='id card' />
       Your Last Words by Face Similarity
       <Header.Subheader>
-      An artwork by guidosalimbeni.it
+      Let the webcam detect your face. Then, an algorithm matches your face to more than a hundred inmates sentenced to death. After the loop, you can see the last words pronounced by the matched inmate before death.
       </Header.Subheader>
     </Header>
     <Divider />
@@ -210,13 +210,17 @@ function App (){
         
     </Container>
     <Divider />
+    
+      <Container>
     <Header as='h2' icon inverted textAlign='center'>
       
-      Your Last Words by Face Similarity
-      <Header.Subheader>
-      An artwork by guidosalimbeni.it
-      </Header.Subheader>
-    </Header>
+      
+        <Header.Subheader>
+        An artwork by guidosalimbeni.it
+        </Header.Subheader>
+      </Header>
+      </Container>
+    
     
     
     
