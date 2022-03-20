@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from "react-dom";
 import * as faceApi from "face-api.js";
-import data_inmates from "./data";
+// import data_inmates from "./data";
 import data_inmates_2 from "./data2";
 import "./styles.css";
 import ReactGA from 'react-ga';
@@ -82,7 +82,7 @@ function App (){
     
     }
 
-    var i;
+    // var i;
     var results = {"selection": 1, "text": "none"};
     // var distance = 1.0;
 
@@ -96,41 +96,14 @@ function App (){
       // console.log("  eeeee  e   e " + curr_distance2);
       if (curr_distance2 > distance){
         results["selection"] = key;
-        results["text"] = data_inmates_2[key]["Last Statement"];
+        results["text"] = value["Last Statement"];
         distance = curr_distance2;
+        // data_inmates_2[key]
         
         setdistanceScore(distance);
         setlastwords(results.text);
       }
     }
-
-
-    // for (i = 1; i < 14; i++) {
-      
-    //   //console.log("/images/" + i + ".jpeg")
-    //   const image = await faceApi.fetchImage("/images/" + i + ".jpeg");
-    //   var deathrow = await faceApi.computeFaceDescriptor(image);
-    //   let curr_distance = faceApi.round(
-    //     faceApi.euclideanDistance(out, deathrow)
-    //   )
-    //   // console.log(curr_distance);
-     
-    //   if (curr_distance > distance){
-    //     results["selection"] = i;
-    //     results["text"] = data_inmates[i]["Last Statement"];
-    //     distance = curr_distance;
-        
-    //     setdistanceScore(distance);
-    //     setlastwords(results.text);
-    //   }
-
-    //   // console.log(distance);
-
-    // }
-
-    // console.log(results);
-    // setlastwords(results.text);
-
 
     setTimeout(() => onPlay(), 3000);
   };
@@ -142,6 +115,7 @@ function App (){
     },
     h2: {
       margin: '4em 0em 2em',
+      color: "#169A58",
     },
     h3: {
       marginTop: '1em',
@@ -152,20 +126,27 @@ function App (){
     last: {
       marginBottom: '30px',
     },
+    banner: {
+      margin: '4em 0em 2em',
+      backgroundColor : "#252839" ,
+      display: 'flex',
+      flexDirection: 'column',
+
+    }
   }
 
   
     return (
       <>
-      <div className="App">
+      <div >
 
       <Container>
-  
-    <style>
-      {`
-      html, body {
+      {/* html, body {
         background-color: #252839 !important;
-      }
+      } */}
+    {/* <style>
+      {`
+      
       p {
         align-content: center;
         background-color: #495285;
@@ -181,27 +162,30 @@ function App (){
       }
     }
     `}
-    </style>
-    <Header as='h2' icon inverted textAlign='center'>
-      <Icon name='grid layout' />
-      Your Last Words by Face Similarity
-      <Header.Subheader>
+    </style> */}
+    <Container > 
+    
+   
+    <Header  as = "h2" style={style.h2} inverted textAlign='center'>
+      
       An artwork by guidosalimbeni.it
+      <Header.Subheader>
+      Let the webcam detect your face. Then, an algorithm matches your face to more than a hundred inmates sentenced to death. After the loop, you can see the last words pronounced by the matched inmate before death.
       </Header.Subheader>
     </Header>
+    </Container>
     <Divider />
-    
+    <Container as = "container" fluid style={style.banner} >
 
     
-        
-        <Grid columns={2} stackable> 
+        <Grid columns={2} stackable  > 
         <Grid.Row>
         <Grid.Column>
         <Header as='h3' textAlign='center' style={style.h3} content= "Last statement from best match:"/>
         <Header as='h3' textAlign='center' style={style.h3} content= {lastwords}/>
       </Grid.Column>
       <Grid.Column>
-      <Container style={{ width: "720", height: "560", position: "relative", alignSelf: 'center'}}>
+      <Container >
         
         <video
           ref={video}
@@ -209,7 +193,7 @@ function App (){
           muted
           onPlay={onPlay}
           style={{
-            position: "absolute",
+            
             width: "720" ,
             height: "560" ,
             left: 0,
@@ -230,13 +214,22 @@ function App (){
     
 
       </Grid>
-    
-      
-       
-        
+      </Container>
         
     </Container>
-
+    <Divider />
+    
+      <Container>
+    <Header as='h2' icon inverted textAlign='center'>
+      
+      
+        <Header.Subheader>
+        An artwork by guidosalimbeni.it
+        </Header.Subheader>
+      </Header>
+      </Container>
+    
+    
     
     
     

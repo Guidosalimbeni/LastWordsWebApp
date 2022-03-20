@@ -10,7 +10,6 @@ import {
   Container,
   Header,
   Grid,
-  Icon,
   Divider,
 } from 'semantic-ui-react'
 
@@ -115,16 +114,30 @@ function App (){
     },
     h2: {
       margin: '4em 0em 2em',
+      color: "#169A58",
     },
     h3: {
       marginTop: '1em',
       padding: '0.5em 0em',
-      color: "#fff",
+      color: "#252626",
+      marginBottom:'10px',
+    },
+    h4: {
+      marginTop: '1em',
+      padding: '0.5em 0em',
+      color: "#4A4A4A",
       marginBottom:'10px',
     },
     last: {
       marginBottom: '30px',
     },
+    banner: {
+      margin: '4em 0em 2em',
+      backgroundColor : "#252839" ,
+      display: 'flex',
+      flexDirection: 'column',
+
+    }
   }
 
   
@@ -132,46 +145,28 @@ function App (){
       <>
       <div >
 
-      <Container>
-  
-    <style>
-      {`
-      html, body {
-        background-color: #252839 !important;
-      }
-      p {
-        align-content: center;
-        background-color: #495285;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-height: 6em;
-      }
-      p > span {
-        opacity: 0.4;
-        text-align: center;
-      }
-    }
-    `}
-    </style>
-    <Header as='h2' icon inverted textAlign='center'>
-      <Icon name='id card' />
-      Your Last Words by Face Similarity
+      <Container fluid >
+      
+    <Container fluid style={style.banner}> 
+    
+   
+    <Header  as = "h2" style={style.banner} inverted textAlign='center'>
+      
+      Last Words
       <Header.Subheader>
       Let the webcam detect your face. Then, an algorithm matches your face to more than a hundred inmates sentenced to death. After the loop, you can see the last words pronounced by the matched inmate before death.
       </Header.Subheader>
     </Header>
+    </Container>
     <Divider />
-    
+    <Container  >
 
     
-        
-        <Grid columns={2} stackable> 
+        <Grid columns={2} stackable  > 
         <Grid.Row>
         <Grid.Column>
         <Header as='h3' textAlign='center' style={style.h3} content= "Last statement from best match:"/>
-        <Header as='h3' textAlign='center' style={style.h3} content= {lastwords}/>
+        <Header as='h4' textAlign='center' style={style.h4} content= {lastwords}/>
       </Grid.Column>
       <Grid.Column>
       <Container >
@@ -190,6 +185,7 @@ function App (){
             bottom: 0,
             top: 0,
             alignSelf: 'center',
+            display: "flex",
             
             
           }}
@@ -203,16 +199,13 @@ function App (){
     
 
       </Grid>
-    
-      
-       
-        
+      </Container>
         
     </Container>
     <Divider />
     
       <Container>
-    <Header as='h2' icon inverted textAlign='center'>
+    <Header as='h2' textAlign='center'>
       
       
         <Header.Subheader>
