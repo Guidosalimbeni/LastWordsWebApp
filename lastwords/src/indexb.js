@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from "react-dom";
 import * as faceApi from "face-api.js";
-// import data_inmates from "./data";
+import data_inmates from "./data";
 import data_inmates_2 from "./data2";
 import "./styles.css";
 import ReactGA from 'react-ga';
@@ -82,7 +82,7 @@ function App (){
     
     }
 
-    // var i;
+    var i;
     var results = {"selection": 1, "text": "none"};
     // var distance = 1.0;
 
@@ -96,14 +96,41 @@ function App (){
       // console.log("  eeeee  e   e " + curr_distance2);
       if (curr_distance2 > distance){
         results["selection"] = key;
-        results["text"] = value["Last Statement"];
+        results["text"] = data_inmates_2[key]["Last Statement"];
         distance = curr_distance2;
-        // data_inmates_2[key]
         
         setdistanceScore(distance);
         setlastwords(results.text);
       }
     }
+
+
+    // for (i = 1; i < 14; i++) {
+      
+    //   //console.log("/images/" + i + ".jpeg")
+    //   const image = await faceApi.fetchImage("/images/" + i + ".jpeg");
+    //   var deathrow = await faceApi.computeFaceDescriptor(image);
+    //   let curr_distance = faceApi.round(
+    //     faceApi.euclideanDistance(out, deathrow)
+    //   )
+    //   // console.log(curr_distance);
+     
+    //   if (curr_distance > distance){
+    //     results["selection"] = i;
+    //     results["text"] = data_inmates[i]["Last Statement"];
+    //     distance = curr_distance;
+        
+    //     setdistanceScore(distance);
+    //     setlastwords(results.text);
+    //   }
+
+    //   // console.log(distance);
+
+    // }
+
+    // console.log(results);
+    // setlastwords(results.text);
+
 
     setTimeout(() => onPlay(), 3000);
   };
@@ -130,7 +157,7 @@ function App (){
   
     return (
       <>
-      <div >
+      <div className="App">
 
       <Container>
   
@@ -156,7 +183,7 @@ function App (){
     `}
     </style>
     <Header as='h2' icon inverted textAlign='center'>
-      <Icon name='id card' />
+      <Icon name='grid layout' />
       Your Last Words by Face Similarity
       <Header.Subheader>
       An artwork by guidosalimbeni.it
@@ -174,7 +201,7 @@ function App (){
         <Header as='h3' textAlign='center' style={style.h3} content= {lastwords}/>
       </Grid.Column>
       <Grid.Column>
-      <Container >
+      <Container style={{ width: "720", height: "560", position: "relative", alignSelf: 'center'}}>
         
         <video
           ref={video}
@@ -182,7 +209,7 @@ function App (){
           muted
           onPlay={onPlay}
           style={{
-            
+            position: "absolute",
             width: "720" ,
             height: "560" ,
             left: 0,
@@ -209,15 +236,7 @@ function App (){
         
         
     </Container>
-    <Divider />
-    <Header as='h2' icon inverted textAlign='center'>
-      
-      Your Last Words by Face Similarity
-      <Header.Subheader>
-      An artwork by guidosalimbeni.it
-      </Header.Subheader>
-    </Header>
-    
+
     
     
     
