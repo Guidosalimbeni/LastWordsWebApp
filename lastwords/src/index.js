@@ -98,6 +98,7 @@ function App() {
         results["selection"] = key;
         results["text"] = value["Last Statement"];
         distance = curr_distance2;
+        distance = distance + 0.015;
         // data_inmates_2[key]
 
         setdistanceScore(distance);
