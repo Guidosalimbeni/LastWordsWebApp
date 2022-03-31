@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
-import * as faceApi from "face-api.js";
+import * as faceapi from "face-api.js";
 // import data_inmates from "./data";
 import data_inmates_2 from "./data2";
 import "./styles.css";
 import ReactGA from "react-ga";
 import "semantic-ui-css/semantic.min.css";
-import { Container, Header, Grid, Divider, Button } from "semantic-ui-react";
+import {
+  Container,
+  Header,
+  Grid,
+  Divider,
+  Button,
+  Image,
+} from "semantic-ui-react";
 
 var video = React.createRef();
 var mediaStream = React.createRef();
@@ -14,6 +21,7 @@ var mediaStream = React.createRef();
 function App() {
   const [lastwords, setlastwords] = useState("");
   var [distance, setdistanceScore] = useState(0);
+  const timetowait = 2000;
 
   useEffect(() => run(), []);
   const log = (...args) => {
@@ -28,10 +36,10 @@ function App() {
   const run = async () => {
     log("run started");
     try {
-      await faceApi.nets.tinyFaceDetector.load("/models/");
-      await faceApi.nets.ssdMobilenetv1.load("/models");
-      await faceApi.loadFaceExpressionModel(`/models/`);
-      await faceApi.loadFaceRecognitionModel(`/models/`);
+      await faceapi.nets.tinyFaceDetector.load("/models/");
+      await faceapi.nets.ssdMobilenetv1.load("/models");
+      await faceapi.loadFaceExpressionModel(`/models/`);
+      await faceapi.loadFaceRecognitionModel(`/models/`);
       mediaStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
       });
@@ -44,12 +52,12 @@ function App() {
 
   const onPlay = async () => {
     if (video.current.paused || video.current.ended) {
-      setTimeout(() => onPlay(), 3000);
+      setTimeout(() => onPlay(), timetowait);
       return;
     }
 
-    var out = await faceApi.computeFaceDescriptor(video.current);
-    var result = await faceApi.detectSingleFace(video.current);
+    var out = await faceapi.computeFaceDescriptor(video.current);
+    var result = await faceapi.detectSingleFace(video.current);
 
     if (result) {
       const canvas = document.getElementById("overlay");
@@ -57,15 +65,20 @@ function App() {
       var w = result.imageWidth;
       var h = result.imageHeight;
 
-      const dims = faceApi.resizeResults(result, { width: w, height: h });
+      console.log(w, h);
+
+      const dims = faceapi.resizeResults(result, {
+        width: w,
+        height: h,
+      });
 
       canvas.width = w;
       canvas.height = h;
 
-      faceApi.drawDetection(canvas, dims, false);
+      faceapi.drawDetection(canvas, dims, false);
 
-      // const dims = faceApi.matchDimensions(canvas, video.current, true)
-      // faceApi.draw.drawDetections(canvas, faceApi.resizeResults(result, dims))
+      // const dims = faceapi.matchDimensions(canvas, video.current, true);
+      // faceapi.drawDetection(canvas, faceapi.resizeResults(result, dims));
       // https://www.youtube.com/watch?v=CVClHLwv-4I
     }
 
@@ -75,10 +88,10 @@ function App() {
 
     for (const [key, value] of Object.entries(data_inmates_2)) {
       // console.log(key, value);
-      const image = await faceApi.fetchImage("/images2/" + key + ".jpg");
-      var deathrow2 = await faceApi.computeFaceDescriptor(image);
-      let curr_distance2 = faceApi.round(
-        faceApi.euclideanDistance(out, deathrow2)
+      const image = await faceapi.fetchImage("/images2/" + key + ".jpg");
+      var deathrow2 = await faceapi.computeFaceDescriptor(image);
+      let curr_distance2 = faceapi.round(
+        faceapi.euclideanDistance(out, deathrow2)
       );
       // console.log("  eeeee  e   e " + curr_distance2);
       if (curr_distance2 > distance) {
@@ -92,33 +105,10 @@ function App() {
       }
     }
 
-    setTimeout(() => onPlay(), 3000);
+    setTimeout(() => onPlay(), timetowait);
   };
 
   const style = {
-    h1: {
-      marginTop: "1em",
-      color: "#fff",
-    },
-    h2: {
-      margin: "4em 0em 2em",
-      color: "#169A58",
-    },
-    h3: {
-      marginTop: "1em",
-      padding: "0.5em 0em",
-      color: "#252626",
-      marginBottom: "10px",
-    },
-    h4: {
-      marginTop: "1em",
-      padding: "0.5em 0em",
-      color: "#4A4A4A",
-      marginBottom: "10px",
-    },
-    last: {
-      marginBottom: "30px",
-    },
     banner: {
       margin: "4em 0em 2em",
       backgroundColor: "#252839",
@@ -126,6 +116,9 @@ function App() {
       flexDirection: "column",
     },
   };
+
+  const logo1 = "/images/ukri.png";
+  const logo2 = "/images/uon.jpeg";
 
   return (
     <>
@@ -156,23 +149,28 @@ function App() {
                       muted
                       onPlay={onPlay}
                       style={{
-                        width: "720",
-                        height: "560",
+                        width: 560,
+                        height: 420,
                         left: 0,
                         right: 0,
                         bottom: 0,
                         top: 0,
-                        alignSelf: "center",
-                        display: "flex",
+
+                        position: "relative",
                       }}
                     />
                   </Container>
                   <canvas
                     id="overlay"
                     style={{
+                      width: 560,
+                      height: 420,
                       position: "absolute",
-                      top: 0,
+
                       left: 0,
+                      right: 0,
+                      bottom: 0,
+                      top: 0,
                     }}
                   />
                 </Grid.Column>
@@ -203,6 +201,11 @@ function App() {
                   >
                     Go to Survey
                   </Button>
+                  <Divider></Divider>
+                  <Image.Group size="small">
+                    <Image src={logo1} />
+                    <Image src={logo2} />
+                  </Image.Group>
                 </Container>
               </Grid.Column>
               <Grid.Column>
