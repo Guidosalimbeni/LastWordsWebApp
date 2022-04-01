@@ -150,22 +150,22 @@ function App() {
                       muted
                       onPlay={onPlay}
                       style={{
-                        width: 560,
-                        height: 420,
+                        width: 376,
+                        height: 282,
                         left: 0,
                         right: 0,
                         bottom: 0,
                         top: 0,
 
-                        position: "relative",
+                        // position: "relative",
                       }}
                     />
                   </Container>
                   <canvas
                     id="overlay"
                     style={{
-                      width: 560,
-                      height: 420,
+                      width: 376,
+                      height: 282,
                       position: "absolute",
 
                       left: 0,
