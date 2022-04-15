@@ -197,7 +197,7 @@ function App() {
                     onClick={(e) => {
                       e.preventDefault();
                       window.location.href =
-                        "https://nottingham.onlinesurveys.ac.uk/last-words-survey";
+                        "https://nottingham.onlinesurveys.ac.uk/art-project-last-words-survey-art-by-guido-salimbeni";
                     }}
                   >
                     Go to Survey
