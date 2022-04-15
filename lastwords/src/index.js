@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import * as faceapi from "face-api.js";
 // import data_inmates from "./data";
 import data_inmates_2 from "./data2";
+import data_info from "./info";
 import "./styles.css";
 import ReactGA from "react-ga";
 import "semantic-ui-css/semantic.min.css";
@@ -14,13 +15,15 @@ import {
   Button,
   Image,
 } from "semantic-ui-react";
+import { round } from "face-api.js";
 
 var video = React.createRef();
 var mediaStream = React.createRef();
 
 function App() {
   const [lastwords, setlastwords] = useState("");
-  var [distance, setdistanceScore] = useState(0);
+  const [extrainfo, setExtrainfo] = useState("");
+  var [distance, setdistanceScore] = useState(1);
   const timetowait = 2000;
 
   useEffect(() => run(), []);
@@ -65,8 +68,6 @@ function App() {
       var w = result.imageWidth;
       var h = result.imageHeight;
 
-      console.log(w, h);
-
       const dims = faceapi.resizeResults(result, {
         width: w,
         height: h,
@@ -93,13 +94,19 @@ function App() {
       let curr_distance2 = faceapi.round(
         faceapi.euclideanDistance(out, deathrow2)
       );
-      // console.log("  eeeee  e   e " + curr_distance2);
-      if (curr_distance2 > distance) {
+
+      if (curr_distance2 < distance) {
+        // console.log("  eeeee  e   e " + curr_distance2);
         results["selection"] = key;
         results["text"] = value["Last Statement"];
         distance = curr_distance2;
-        distance = distance + 0.015;
+        distance = distance - 0.1;
         // data_inmates_2[key]
+        if (typeof data_info[key]["offender_info"] !== "undefined") {
+          setExtrainfo(data_info[key]["offender_info"]);
+          // console.log(data_info[key]["offender_info"]);
+        }
+        //
 
         setdistanceScore(distance);
         setlastwords(results.text);
@@ -141,6 +148,19 @@ function App() {
                     content="Last statement from best match:"
                   />
                   <Header.Subheader textAlign="justified" content={lastwords} />
+                  <Divider></Divider>
+                  <Header.Subheader
+                    textAlign="justified"
+                    content={
+                      "Your face matches: " +
+                      round((1 - distance) * 100) +
+                      "% the inmate's face. See the original photo and read more information about the offender at this link: "
+                    }
+                  />
+                  <a href={extrainfo}>
+                    Lint to the Offender Information from the Texas Department
+                    of Criminal Justice
+                  </a>
                 </Grid.Column>
                 <Grid.Column>
                   <Container>
@@ -185,8 +205,10 @@ function App() {
                   <Header.Subheader>
                     Let the webcam detect your face. Then, an algorithm matches
                     your face to more than a hundred inmates sentenced to death.
-                    After the loop, you can see the last words pronounced by the
-                    matched inmate before death.
+                    The face similarity is given features extracted by the
+                    artificial neural network. Wait a couple of seconds as the
+                    machine loops over all the possible matches. If you want to
+                    try again you might need to refresh the page.
                   </Header.Subheader>
                   <Divider></Divider>
                   <Header>
@@ -213,26 +235,34 @@ function App() {
                 <Container textAlign="justified">
                   <Header>About</Header>
                   <Header.Subheader>
-                    The Texas Department of Criminal Justice has made available
-                    a database that includes the last words of offenders before
-                    execution. In addition, this dataset contains personal
-                    photos and information on criminals executed by the Texas
-                    Department of Criminal Justice from 1982 through November 8,
-                    2017. Texas adopted lethal injection execution in 1977 and
-                    1982, the year in which this dataset, the first offender was
-                    executed by this method. Capital punishment is one of the
-                    controversial issues on human rights in the United States.
-                    This artistic project aims to propose a reflection on
-                    Capital punishment using artificial intelligence as a
-                    stimulus. First, a computer vision algorithm detects the
-                    user's face through the webcam. Next, another algorithm
-                    calculates the similarity of the user's face with the look
-                    of one of the death row inmates present in the database.
-                    Finally, a third algorithm then presents the user with the
-                    last words spoken of the selected condemned. This artistic
-                    project is part of my PhD at the University of Nottingham
-                    which aims to explore the use of artificial intelligence to
-                    produce works of art.
+                    This art project started with the idea of using Face
+                    detection and face similarity machine learning algorithms to
+                    associate a user to another person, because the face is
+                    similar and to see if this can stimulate some sort of
+                    empathic emotiion. Then I ask myself what would be difficult
+                    to feel emphaty and I thought of the Texas database of Death
+                    rows inmates. The Texas Department of Criminal Justice has
+                    made available a database that includes the last words of
+                    offenders before execution. In addition, this dataset
+                    contains personal photos and information on criminals
+                    executed by the Texas Department of Criminal Justice from
+                    1982 through November 8, 2017. Texas adopted lethal
+                    injection execution in 1977 and 1982, the year in which this
+                    dataset, the first offender was executed by this method.
+                    Capital punishment is one of the controversial issues on
+                    human rights in the United States. This artistic project
+                    aims to propose a reflection on Capital punishment, using
+                    artificial intelligence as a stimulus of empathic emotions.
+                    First, a computer vision algorithm detects the user's face
+                    through the webcam. Next, another algorithm calculates the
+                    similarity of the user's face with the look of one of the
+                    death row inmates present in the database. Finally, a third
+                    algorithm then presents the user with the last words spoken
+                    of the selected condemned. This artistic project is part of
+                    my PhD at the University of Nottingham which aims to explore
+                    the use of artificial intelligence to produce works of art.
+                    It is difficult to get an 100% match, however the algorithm
+                    can give a score for the best match.
                   </Header.Subheader>
                 </Container>
               </Grid.Column>
