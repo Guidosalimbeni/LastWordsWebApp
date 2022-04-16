@@ -157,7 +157,7 @@ function App() {
                       "% the inmate's face. See the original photo and read more information about the offender at this link: "
                     }
                   />
-                  <a href={extrainfo}>
+                  <a href={extrainfo} target="_blank" rel="noopener noreferrer">
                     Lint to the Offender Information from the Texas Department
                     of Criminal Justice
                   </a>
@@ -229,30 +229,8 @@ function App() {
                     <Image src={logo1} />
                     <Image src={logo2} />
                   </Image.Group>
-                </Container>
-              </Grid.Column>
-              <Grid.Column>
-                <Container textAlign="justified">
-                  <Header>About</Header>
+                  <Divider></Divider>
                   <Header.Subheader>
-                    This art project started with the idea of using Face
-                    detection and face similarity machine learning algorithms to
-                    associate a user to another person, because the face is
-                    similar and to see if this can stimulate some sort of
-                    empathic emotiion. Then I ask myself what would be difficult
-                    to feel emphaty and I thought of the Texas database of Death
-                    rows inmates. The Texas Department of Criminal Justice has
-                    made available a database that includes the last words of
-                    offenders before execution. In addition, this dataset
-                    contains personal photos and information on criminals
-                    executed by the Texas Department of Criminal Justice from
-                    1982 through November 8, 2017. Texas adopted lethal
-                    injection execution in 1977 and 1982, the year in which this
-                    dataset, the first offender was executed by this method.
-                    Capital punishment is one of the controversial issues on
-                    human rights in the United States. This artistic project
-                    aims to propose a reflection on Capital punishment, using
-                    artificial intelligence as a stimulus of empathic emotions.
                     First, a computer vision algorithm detects the user's face
                     through the webcam. Next, another algorithm calculates the
                     similarity of the user's face with the look of one of the
@@ -263,6 +241,49 @@ function App() {
                     the use of artificial intelligence to produce works of art.
                     It is difficult to get an 100% match, however the algorithm
                     can give a score for the best match.
+                  </Header.Subheader>
+                </Container>
+              </Grid.Column>
+              <Grid.Column>
+                <Container textAlign="justified">
+                  <Header>About</Header>
+                  <Header.Subheader>
+                    I have often heard phrases like, your daughter looks a lot
+                    like you, you look like a stark copy of your brother, or
+                    maybe your face reminds me of someone. Have we met before?
+                    Sometimes, I'm surprised by how complicated it is for
+                    someone to recognise a person by their face. For instance,
+                    my wife doesn't recognise me at the bar (true story). You
+                    remind me of someone, another question that often remains
+                    unsolved and frustrating. And then comes the artificial
+                    intelligence, and for the machine, recognising a face seems
+                    like a walk in the park. For a human, recognising a face
+                    comes with a feeling of gratification. There is a sense of
+                    empathy or curiosity for the person we look like when we are
+                    recognised. I thought if the machine could help us find
+                    these similarities, how can I translate it all into an
+                    artistic experience? The reason is that I am an artist, and
+                    I like to experiment with artificial intelligence and art.
+                    Then I asked myself what would be difficult to feel empathy
+                    for and thought of the Texas database of death row inmates.
+                    In response, I develop this application, hoping to arouse
+                    curiosity and perhaps provoke reasoning both on technology
+                    and on a complex issue such as the death penalty.
+                  </Header.Subheader>
+                  <Divider></Divider>
+                  <Header.Subheader>
+                    The Texas Department of Criminal Justice has made available
+                    a database that includes the last words of offenders before
+                    execution. In addition, this dataset contains personal
+                    photos and information on criminals executed by the Texas
+                    Department of Criminal Justice from 1982 through November 8,
+                    2017. Texas adopted lethal injection execution in 1977 and
+                    1982, the year in which this dataset, the first offender was
+                    executed by this method. Capital punishment is one of the
+                    controversial issues on human rights in the United States.
+                    This artistic project aims to propose a reflection on
+                    Capital punishment, using artificial intelligence as a
+                    stimulus of empathic emotions.
                   </Header.Subheader>
                 </Container>
               </Grid.Column>
