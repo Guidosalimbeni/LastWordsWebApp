@@ -9,7 +9,9 @@ import ReactGA from "react-ga";
 import "semantic-ui-css/semantic.min.css";
 import {
   Container,
+  Form,
   Header,
+  Input,
   Grid,
   Divider,
   Button,
@@ -24,6 +26,7 @@ function App() {
   const [lastwords, setlastwords] = useState("");
   const [extrainfo, setExtrainfo] = useState("");
   var [distance, setdistanceScore] = useState(1);
+  const [userInput, setUserInput] = useState("");
   const timetowait = 2000;
 
   useEffect(() => run(), []);
@@ -35,6 +38,37 @@ function App() {
     ReactGA.initialize("UA-199875361-1");
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
+
+  const changePromptHandler = (e) => {
+    e.preventDefault();
+    setUserInput(e.target.value);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    let feedback = userInput;
+    let form = new FormData();
+    form.append("feedback", feedback);
+
+    fetch("https://www.guidosalimbeni.it/aironic/addfeedback.php", {
+      // URL
+      // body: JSON.stringify(form), // data you send.
+      body: new URLSearchParams(form),
+
+      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+      headers: {
+        "content-type": "application/json",
+      },
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      mode: "no-cors", // no-cors, cors, *same-origin
+      redirect: "follow", // *manual, follow, error
+      referrer: "no-referrer", // *client, no-referrer
+    })
+      .then((resp) => {
+        console.log(resp);
+      })
+      .then((err) => console.log(err));
+  };
 
   const run = async () => {
     log("run started");
@@ -86,6 +120,8 @@ function App() {
     // var i;
     var results = { selection: 1, text: "none" };
     // var distance = 1.0;
+
+    // USING AIRONIC DATABASE SINCE DID NOT WANT TO CREATE A NEW DATABASE ??????????????????!!!!!!!!!!!
 
     for (const [key, value] of Object.entries(data_inmates_2)) {
       // console.log(key, value);
@@ -210,6 +246,29 @@ function App() {
                     machine loops over all the possible matches. If you want to
                     try again you might need to refresh the page.
                   </Header.Subheader>
+                  <Divider></Divider>
+                  <Header>Please provide your feedback</Header>
+                  <Container>
+                    <Form>
+                      <Form.Group widths="equal">
+                        <Form.Field
+                          control={Input}
+                          onChange={changePromptHandler}
+                          label="How would you improve this art project?"
+                          placeholder="Please type your feedbackk here"
+                        />
+                      </Form.Group>
+
+                      <Form.Field
+                        name="data"
+                        color="blue"
+                        onClick={(e) => submitHandler(e)}
+                        control={Button}
+                      >
+                        Submit
+                      </Form.Field>
+                    </Form>
+                  </Container>
                   <Divider></Divider>
                   <Header>
                     Please share you feedback by partecipating to a survey.
